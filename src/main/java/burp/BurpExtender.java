@@ -1,6 +1,8 @@
 package burp;
 
 import java.awt.Component;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.PrintWriter;
 import java.util.*;
 import java.util.concurrent.ExecutorService;
@@ -9,7 +11,7 @@ import javax.swing.*;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
-public class BurpExtender implements IBurpExtender,ITab,IProxyListener {
+public class BurpExtender implements IBurpExtender,ITab,IProxyListener,IContextMenuFactory {
     public final static String extensionName = "Passive Scan Client";
     public final static String version ="0.1";
     public static IBurpExtenderCallbacks callbacks;
@@ -35,6 +37,7 @@ public class BurpExtender implements IBurpExtender,ITab,IProxyListener {
             public void run() {
                 BurpExtender.this.callbacks.addSuiteTab(BurpExtender.this);
                 BurpExtender.this.callbacks.registerProxyListener(BurpExtender.this);
+                BurpExtender.this.callbacks.registerContextMenuFactory(BurpExtender.this);
                 stdout.println(Utils.getBanner());
             }
         });
@@ -73,7 +76,9 @@ public class BurpExtender implements IBurpExtender,ITab,IProxyListener {
     public Component getUiComponent() {
         return gui.getComponet();
     }
+    public void addHttpMessage(IHttpRequestResponse resrsp){
 
+    }
     public void processProxyMessage(boolean messageIsRequest, final IInterceptedProxyMessage iInterceptedProxyMessage) {
         if (!messageIsRequest && Config.IS_RUNNING) {
             IHttpRequestResponse reprsp = iInterceptedProxyMessage.getMessageInfo();
@@ -113,5 +118,43 @@ public class BurpExtender implements IBurpExtender,ITab,IProxyListener {
                 }
             });
         }
+    }
+    @Override
+    public List<JMenuItem> createMenuItems(IContextMenuInvocation invocation) {
+        final IHttpRequestResponse[] resrsps = invocation.getSelectedMessages();
+        List<JMenuItem> options = new ArrayList<>();
+
+        if(resrsps == null || resrsps.length != 1) {
+            return options;
+        }
+        JMenuItem sendButton = new JMenuItem("send to passivescan");
+        sendButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                GUI.setConfig();
+                for(final IHttpRequestResponse resrsp : resrsps){
+                    executorService.submit(new Runnable() {
+                        @Override
+                        public void run() {
+                            synchronized(log) {
+                                int row = log.size();
+                                String method = helpers.analyzeRequest(resrsp).getMethod();
+                                Map<String,String> mapResult = HttpAndHttpsProxy.Proxy(resrsp);
+
+                                log.add(new LogEntry(0,
+                                        callbacks.saveBuffersToTempFiles(resrsp), helpers.analyzeRequest(resrsp).getUrl(),
+                                        method,
+                                        mapResult)
+                                );
+                                GUI.logTable.getHttpLogTableModel().fireTableRowsInserted(row, row);
+                            }
+                        }
+                    });
+                }
+
+            }
+        });
+        options.add(sendButton);
+        return options;
     }
 }

@@ -9,18 +9,18 @@ import javax.swing.event.ChangeListener;
 
 public class GUI implements IMessageEditorController {
     private JPanel contentPane;
-    private JLabel lbHost;
-    private JTextField tfHost;
-    private JLabel lbPort;
-    private JTextField tfPort;
+    private  JLabel lbHost;
+    private static JTextField tfHost;
+    private  JLabel lbPort;
+    private static JTextField tfPort;
     private JLabel lbTimeout;
-    private JTextField tfTimeout;
+    private static JTextField tfTimeout;
     private JLabel lbUsername;
-    private JTextField tfUsername;
+    private static JTextField tfUsername;
     private JLabel lbPassword;
-    private JTextField tfPassword;
-    private JTextField tfDomain;
-    private JTextField tfExcludeSuffix;
+    private static JTextField tfPassword;
+    private static JTextField tfDomain;
+    private static JTextField tfExcludeSuffix;
     private JToggleButton btnConn;
     private JButton btnClear;
     private JSplitPane splitPane;
@@ -387,7 +387,15 @@ public class GUI implements IMessageEditorController {
         BurpExtender.callbacks.customizeUiComponent(splitPane);
         BurpExtender.callbacks.customizeUiComponent(contentPane);
     }
-
+    public static void  setConfig(){
+        Config.PROXY_HOST = tfHost.getText();
+        Config.PROXY_PORT = Integer.valueOf(tfPort.getText());
+        Config.PROXY_TIMEOUT = Integer.valueOf(tfTimeout.getText());
+        Config.PROXY_USERNAME = tfUsername.getText();
+        Config.PROXY_PASSWORD = tfPassword.getText();
+        Config.DOMAIN_REGX = tfDomain.getText();
+        Config.SUFFIX_REGX = tfExcludeSuffix.getText();
+    }
     public Component getComponet(){
         return contentPane;
     }
