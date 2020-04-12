@@ -1,3 +1,9 @@
+# 私自修改版
+![](https://adddd-1251699369.cos.ap-shanghai.myqcloud.com/20200412151355.png)
+为这个插件加了一个右键发送按钮，原插件只能自动捕捉不灵活
+右键发送指定请求后，会直接自动转发该请求，跟run不run没关系
+
+
 # Passive Scan Client | Burp被动扫描流量转发插件
 
 
