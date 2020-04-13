@@ -49,7 +49,34 @@ public class HttpAndHttpsProxy {
             return HttpProxy(url, headers, reqbody, Config.PROXY_HOST, Config.PROXY_PORT,Config.PROXY_USERNAME,Config.PROXY_PASSWORD);
         }
     }
+    public static Map<String,String> Proxy2(IHttpRequestResponse requestResponse){
+        byte[] req = requestResponse.getRequest();
+        String url = null;
+        byte[] reqbody = null;
+        List<String> headers = null;
 
+        IHttpService httpService = requestResponse.getHttpService();
+        IRequestInfo reqInfo = BurpExtender.helpers.analyzeRequest(httpService,req);
+
+        if(reqInfo.getMethod().equals("POST")){
+            int bodyOffset = reqInfo.getBodyOffset();
+            String body = null;
+            try {
+                body = new String(req, bodyOffset, req.length - bodyOffset, "UTF-8");
+                reqbody = body.getBytes("UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+        }
+        //BurpExtender.stderr.println("[+] url: " + resInfo.getUrl());
+        headers = reqInfo.getHeaders();
+        url = reqInfo.getUrl().toString();
+        if(httpService.getProtocol().equals("https")){
+            return HttpsProxy(url, headers, reqbody, Config.PROXY_HOST2, Config.PROXY_PORT2,Config.PROXY_USERNAME2,Config.PROXY_PASSWORD2);
+        }else {
+            return HttpProxy(url, headers, reqbody, Config.PROXY_HOST2, Config.PROXY_PORT2,Config.PROXY_USERNAME2,Config.PROXY_PASSWORD2);
+        }
+    }
     public static Map<String,String> HttpsProxy(String url, List<String> headers,byte[] body, String proxy, int port,String username,String password){
         Map<String,String> mapResult = new HashMap<String,String>();
         String status = "";

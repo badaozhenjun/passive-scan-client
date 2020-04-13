@@ -19,6 +19,18 @@ public class GUI implements IMessageEditorController {
     private static JTextField tfUsername;
     private JLabel lbPassword;
     private static JTextField tfPassword;
+
+    private  JLabel lbHost2;
+    private static JTextField tfHost2;
+    private  JLabel lbPort2;
+    private static JTextField tfPort2;
+    private JLabel lbUsername2;
+    private static JTextField tfUsername2;
+    private JLabel lbPassword2;
+    private static JTextField tfPassword2;
+
+    private static JCheckBox enableHost2;
+
     private static JTextField tfDomain;
     private static JTextField tfExcludeSuffix;
     private JToggleButton btnConn;
@@ -164,6 +176,10 @@ public class GUI implements IMessageEditorController {
         gbc_lb1.gridy = 0;
         ConfigPanel.add(new JLabel(""), gbc_lb1);
 
+        init_proxy2(ConfigPanel);
+
+
+
         btnConn = new JToggleButton("Run");
         btnConn.addChangeListener(new ChangeListener() {
             public void stateChanged(ChangeEvent arg0) {
@@ -177,6 +193,12 @@ public class GUI implements IMessageEditorController {
                     Config.PROXY_TIMEOUT = Integer.valueOf(tfTimeout.getText());
                     Config.PROXY_USERNAME = tfUsername.getText();
                     Config.PROXY_PASSWORD = tfPassword.getText();
+
+                    Config.PROXY_HOST2 = tfHost2.getText();
+                    Config.PROXY_PORT2 = Integer.valueOf(tfPort2.getText());
+                    Config.PROXY_USERNAME2 = tfUsername2.getText();
+                    Config.PROXY_PASSWORD2 = tfPassword2.getText();
+                    Config.PROXY2_ENABLE = enableHost2.isSelected();
                     Config.DOMAIN_REGX = tfDomain.getText();
                     Config.SUFFIX_REGX = tfExcludeSuffix.getText();
                     setAllEnabled(false);
@@ -387,12 +409,102 @@ public class GUI implements IMessageEditorController {
         BurpExtender.callbacks.customizeUiComponent(splitPane);
         BurpExtender.callbacks.customizeUiComponent(contentPane);
     }
+    public void init_proxy2(JPanel ConfigPanel){
+
+        lbHost2 = new JLabel("Host2:");
+        GridBagConstraints gbc_lbHost2 = new GridBagConstraints();
+        gbc_lbHost2.fill = 2;
+        gbc_lbHost2.insets = new Insets(0, 0, 0, 5);
+        gbc_lbHost2.gridx = 0;
+        gbc_lbHost2.gridy = 1;
+        ConfigPanel.add(lbHost2, gbc_lbHost2);
+
+        tfHost2 = new JTextField();
+        tfHost2.setColumns(10);
+        tfHost2.setText("127.0.0.1");
+        GridBagConstraints gbc_tfHost2 = new GridBagConstraints();
+        gbc_tfHost2.fill = 2;
+        gbc_tfHost2.insets = new Insets(0, 0, 0, 5);
+        gbc_tfHost2.gridx = 1;
+        gbc_tfHost2.gridy = 1;
+        ConfigPanel.add(tfHost2, gbc_tfHost2);
+
+        lbPort2 = new JLabel("Port2:");
+        GridBagConstraints gbc_lbPort2 = new GridBagConstraints();
+        gbc_lbPort2.fill = 2;
+        gbc_lbPort2.insets = new Insets(0, 0, 0, 5);
+        gbc_lbPort2.gridx = 2;
+        gbc_lbPort2.gridy = 1;
+        ConfigPanel.add(lbPort2, gbc_lbPort2);
+
+        tfPort2 = new JTextField();
+        tfPort2.setText("1664");
+        tfPort2.setColumns(10);
+        GridBagConstraints gbc_tfPort2 = new GridBagConstraints();
+        gbc_tfPort2.fill = 2;
+        gbc_tfPort2.insets = new Insets(0, 0, 0, 5);
+        gbc_tfPort2.gridx = 3;
+        gbc_tfPort2.gridy = 1;
+        ConfigPanel.add(tfPort2, gbc_tfPort2);
+
+        lbUsername2 = new JLabel("Username2:");
+        GridBagConstraints gbc_lbUsername2 = new GridBagConstraints();
+        gbc_lbUsername2.fill = 2;
+        gbc_lbUsername2.insets = new Insets(0, 0, 0, 5);
+        gbc_lbUsername2.gridx = 4;
+        gbc_lbUsername2.gridy = 1;
+        ConfigPanel.add(lbUsername2, gbc_lbUsername2);
+
+        tfUsername2 = new JTextField();
+        tfUsername2.setText("");
+        tfUsername2.setColumns(10);
+        GridBagConstraints gbc_tfUsername2 = new GridBagConstraints();
+        gbc_tfUsername2.fill = 2;
+        gbc_tfUsername2.insets = new Insets(0, 0, 0, 5);
+        gbc_tfUsername2.gridx = 5;
+        gbc_tfUsername2.gridy = 1;
+        ConfigPanel.add(tfUsername2, gbc_tfUsername2);
+
+        lbPassword2 = new JLabel("Password2:");
+        GridBagConstraints gbc_lbPassword2 = new GridBagConstraints();
+        gbc_lbPassword2.fill = 2;
+        gbc_lbPassword2.insets = new Insets(0, 0, 0, 5);
+        gbc_lbPassword2.gridx = 6;
+        gbc_lbPassword2.gridy = 1;
+        ConfigPanel.add(lbPassword2, gbc_lbPassword2);
+
+        tfPassword2 = new JTextField();
+        tfPassword2.setText("");
+        tfPassword2.setColumns(10);
+        GridBagConstraints gbc_tfPassword2 = new GridBagConstraints();
+        gbc_tfPassword2.fill = 2;
+        gbc_tfPassword2.insets = new Insets(0, 0, 0, 5);
+        gbc_tfPassword2.gridx = 7;
+        gbc_tfPassword2.gridy = 1;
+        ConfigPanel.add(tfPassword2, gbc_tfPassword2);
+
+        enableHost2 = new JCheckBox("proxy2 enable");
+        enableHost2.setSelected(false);
+        GridBagConstraints gbc_enableHost2 = new GridBagConstraints();
+        gbc_enableHost2.fill = 2;
+        gbc_enableHost2.insets = new Insets(0, 0, 0, 5);
+        gbc_enableHost2.gridx = 8;
+        gbc_enableHost2.gridy = 1;
+        ConfigPanel.add(enableHost2, gbc_enableHost2);
+    }
+
     public static void  setConfig(){
         Config.PROXY_HOST = tfHost.getText();
         Config.PROXY_PORT = Integer.valueOf(tfPort.getText());
         Config.PROXY_TIMEOUT = Integer.valueOf(tfTimeout.getText());
         Config.PROXY_USERNAME = tfUsername.getText();
         Config.PROXY_PASSWORD = tfPassword.getText();
+
+        Config.PROXY_HOST2 = tfHost2.getText();
+        Config.PROXY_PORT2 = Integer.valueOf(tfPort2.getText());
+        Config.PROXY_USERNAME2 = tfUsername2.getText();
+        Config.PROXY_PASSWORD2 = tfPassword2.getText();
+        Config.PROXY2_ENABLE = enableHost2.isSelected();
         Config.DOMAIN_REGX = tfDomain.getText();
         Config.SUFFIX_REGX = tfExcludeSuffix.getText();
     }
@@ -417,6 +529,12 @@ public class GUI implements IMessageEditorController {
         tfPort.setEnabled(is);
         tfUsername.setEnabled(is);
         tfPassword.setEnabled(is);
+
+        tfHost2.setEnabled(is);
+        tfPort2.setEnabled(is);
+        tfUsername2.setEnabled(is);
+        tfPassword2.setEnabled(is);
+        enableHost2.setEnabled(is);
         tfTimeout.setEnabled(is);
         tfDomain.setEnabled(is);
         tfExcludeSuffix.setEnabled(is);

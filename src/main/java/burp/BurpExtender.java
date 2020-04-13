@@ -114,6 +114,16 @@ public class BurpExtender implements IBurpExtender,ITab,IProxyListener,IContextM
                                 mapResult)
                         );
                         GUI.logTable.getHttpLogTableModel().fireTableRowsInserted(row, row);
+                        if(Config.PROXY2_ENABLE){
+                            Map<String,String> mapResult2 = HttpAndHttpsProxy.Proxy2(resrsp);
+
+                            log.add(new LogEntry(0,
+                                    callbacks.saveBuffersToTempFiles(resrsp), helpers.analyzeRequest(resrsp).getUrl(),
+                                    method,
+                                    mapResult2)
+                            );
+                            GUI.logTable.getHttpLogTableModel().fireTableRowsInserted(row, row);
+                        }
                     }
                 }
             });
@@ -127,7 +137,7 @@ public class BurpExtender implements IBurpExtender,ITab,IProxyListener,IContextM
         if(resrsps == null || resrsps.length != 1) {
             return options;
         }
-        JMenuItem sendButton = new JMenuItem("send to passivescan");
+        JMenuItem sendButton = new JMenuItem("Send to Passivescan");
         sendButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -147,6 +157,17 @@ public class BurpExtender implements IBurpExtender,ITab,IProxyListener,IContextM
                                         mapResult)
                                 );
                                 GUI.logTable.getHttpLogTableModel().fireTableRowsInserted(row, row);
+
+                                if(Config.PROXY2_ENABLE){
+                                    Map<String,String> mapResult2 = HttpAndHttpsProxy.Proxy2(resrsp);
+
+                                    log.add(new LogEntry(0,
+                                            callbacks.saveBuffersToTempFiles(resrsp), helpers.analyzeRequest(resrsp).getUrl(),
+                                            method,
+                                            mapResult2)
+                                    );
+                                    GUI.logTable.getHttpLogTableModel().fireTableRowsInserted(row, row);
+                                }
                             }
                         }
                     });

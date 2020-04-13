@@ -6,6 +6,14 @@ public class Config {
     public static Integer PROXY_PORT = 1664;
     public static String PROXY_USERNAME = null;
     public static String PROXY_PASSWORD = null;
+
+    public static String PROXY_HOST2 = "127.0.0.1";
+    public static Integer PROXY_PORT2 = 1664;
+    public static String PROXY_USERNAME2 = null;
+    public static String PROXY_PASSWORD2 = null;
+
+    public static boolean PROXY2_ENABLE = false;
+
     public static Integer PROXY_TIMEOUT = 5000;
     public static String DOMAIN_REGX = "";
     public static String SUFFIX_REGX = "js|css|jpeg|gif|jpg|png|pdf|rar|zip|docx|doc";
